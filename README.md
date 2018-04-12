@@ -1,4 +1,4 @@
-# node-detective-postcss
+# node-detective-postcss [![Build Status](https://travis-ci.org/joscha/node-detective-postcss.svg?branch=master)](https://travis-ci.org/joscha/node-detective-postcss)
 
 > Find the dependencies of a CSS file (postCSS dialects)
 
