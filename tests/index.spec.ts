@@ -10,8 +10,26 @@ describe('node-detective-postcss', () => {
             assert('@import "foo.css"', ['foo.css']);
         });
 
-        it('works with url()', () => {
-            assert('@import url("navigation.css");', ['navigation.css']);
+        describe('url()', () => {
+            it('works with url()', () => {
+                assert('@import url("navigation.css");', ['navigation.css']);
+            });
+
+            it('works with single quotes', () => {
+                assert("@import url('navigation.css');", ['navigation.css']);
+            });
+
+            it('works with no quotes', () => {
+                assert('@import url(navigation.css);', ['navigation.css']);
+            });
+        });
+
+        it('detects multiple imports', () => {
+            assert('@import "1.css"; @import "2.css"; @import "3.css"', [
+                '1.css',
+                '2.css',
+                '3.css',
+            ]);
         });
 
         it('ignores media', () => {
@@ -33,6 +51,10 @@ describe('node-detective-postcss', () => {
                 "@import url('https://fonts.googleapis.com/css?family=Roboto:300,400');",
                 []
             );
+        });
+
+        it('does not touch the paths', () => {
+            assert('@import "../../././bla.css"', ['../../././bla.css']);
         });
     });
 

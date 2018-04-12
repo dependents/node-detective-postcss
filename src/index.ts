@@ -11,16 +11,14 @@ export default function(src) {
     root.walkAtRules(rule => {
         let file = null;
         if (isImportRule(rule)) {
-            const firstNode = postCssValuesParser(rule.params).parse().first
-                .first;
+            const firstNode = parseValue(rule.params).first;
             file = getValueOrUrl(firstNode);
             if (file) {
                 debug(`found %s of %s`, '@import', file);
             }
         }
         if (isValueRule(rule)) {
-            const lastNode = postCssValuesParser(rule.params).parse().first
-                .last;
+            const lastNode = parseValue(rule.params).last;
             file = getValueOrUrl(lastNode);
             if (file) {
                 debug(`found %s of %s`, '@value with import', file);
@@ -31,14 +29,23 @@ export default function(src) {
     return references;
 }
 
+function parseValue(value: string) {
+    return postCssValuesParser(value).parse().first;
+}
+
 function getValueOrUrl(node: postCssValuesParser.Node) {
     let ret;
-    if (node.type === 'func' && node.value === 'url') {
+    if (isUrlNode(node)) {
+        // ['(', 'file', ')']
         ret = node.nodes[1].value;
     } else {
         ret = node.value;
     }
-    return isUrl(ret) ? undefined : ret;
+    return !isUrl(ret) && ret;
+}
+
+function isUrlNode(node: postCssValuesParser.Node) {
+    return node.type === 'func' && node.value === 'url';
 }
 
 function isValueRule(rule: AtRule) {
