@@ -31,7 +31,7 @@
         "precommit": "lint-staged"
     },
     "lint-staged": {
-        "*.{ts,json}": [
+        "*.{ts,json,md}": [
             "prettier --write --tab-width 4 --single-quote --trailing-comma es5 \"*.ts\"",
             "git add"
         ]
@@ -42,5 +42,6 @@
         },
         "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
         "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
-    }
+    },
+    "typings": "dist/index.d.ts"
 }
