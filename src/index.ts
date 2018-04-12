@@ -5,7 +5,7 @@ import isUrl = require('is-url');
 
 const debug = d('detective-postcss');
 
-export default function(src) {
+export = function(src) {
     const references = [];
     const root = parse(src);
     root.walkAtRules(rule => {
@@ -27,7 +27,7 @@ export default function(src) {
         file && references.push(file);
     });
     return references;
-}
+};
 
 function parseValue(value: string) {
     return postCssValuesParser(value).parse().first;
