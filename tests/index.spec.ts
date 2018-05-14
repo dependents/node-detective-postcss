@@ -133,7 +133,9 @@ describe('node-detective-postcss', () => {
         });
     });
 
-    describe('handle broken CSS', () => {
-        expect(() => detective('--')).toThrow(detective.MalformedCssError);
+    describe('error handling', () => {
+        it('works for broken CSS', () => {
+            expect(() => detective('--')).toThrow(detective.MalformedCssError);
+        });
     });
 });
