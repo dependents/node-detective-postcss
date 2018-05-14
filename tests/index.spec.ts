@@ -80,11 +80,20 @@ describe('node-detective-postcss', () => {
                 ['breakpoints.css']
             );
         });
+
         it('works with grouped aliases', () => {
             assert(
                 "@value (small as t-small, large as t-large) from 'typo.css';",
                 ['typo.css']
             );
+        });
+
+        it('leaves simple definitions alone', () => {
+            assert('@value mine: #fff;', []);
+        });
+
+        it('leaves calculated definitions alone', () => {
+            assert('@value mine: calc(1px + 4px)', []);
         });
     });
 });

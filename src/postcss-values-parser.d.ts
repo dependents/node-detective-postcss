@@ -4,6 +4,7 @@ declare module 'postcss-values-parser' {
         interface Node {
             first?: parser.Node;
             last?: parser.Node;
+            prev?(): parser.Node;
             type:
                 | 'atword'
                 | 'colon'

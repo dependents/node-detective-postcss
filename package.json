@@ -27,7 +27,7 @@
     "scripts": {
         "prepare": "tsc --outDir dist --declaration --declarationDir dist",
         "test": "jest --ci",
-        "test:watch": "jest --watch",
+        "test:watch": "jest --watch --notify",
         "precommit": "lint-staged"
     },
     "lint-staged": {
