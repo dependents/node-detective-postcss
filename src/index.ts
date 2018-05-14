@@ -19,9 +19,11 @@ export = function(src) {
         }
         if (isValueRule(rule)) {
             const lastNode = parseValue(rule.params).last;
-            file = getValueOrUrl(lastNode);
-            if (file) {
-                debug(`found %s of %s`, '@value with import', file);
+            if (isFrom(lastNode.prev())) {
+                file = getValueOrUrl(lastNode);
+                if (file) {
+                    debug(`found %s of %s`, '@value with import', file);
+                }
             }
         }
         file && references.push(file);
@@ -54,4 +56,8 @@ function isValueRule(rule: AtRule) {
 
 function isImportRule(rule: AtRule) {
     return rule.name === 'import';
+}
+
+function isFrom(node: postCssValuesParser.Node) {
+    return node.type == 'word' && node.value === 'from';
 }
