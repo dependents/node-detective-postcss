@@ -30,15 +30,25 @@ function detective(src, options: detective.Options = { url: false }) {
                     debug(`found %s of %s`, '@value with import', file);
                 }
             }
+            if (options.url && isUrlNode(lastNode)) {
+                file = getValueOrUrl(lastNode);
+                if (file) {
+                    debug(`found %s of %s`, 'url() with import', file);
+                }
+            }
         }
         file && references.push(file);
     });
     if (options.url) {
         root.walkDecls(decl => {
             const { nodes } = parseValue(decl.value);
-            references = references.concat(
-                nodes.filter(isUrlNode).map(getValueOrUrl)
-            );
+            const files = nodes.filter(isUrlNode).map(getValueOrUrl);
+            if (files) {
+                files.forEach(file =>
+                    debug(`found %s of %s`, 'url() with import', file)
+                );
+                references = references.concat(files);
+            }
         });
     }
     return references;
