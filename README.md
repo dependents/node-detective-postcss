@@ -20,6 +20,9 @@ const content = fs.readFileSync('styles.css', 'utf8');
 
 // list of imported file names (ex: 'bla.css', 'foo.css', etc.)
 const dependencies = detective(content);
+
+// or to also detect any url() references to images, fonts, etc.
+const allDependencies = detective(content, { url: true });
 ```
 
 ### License
