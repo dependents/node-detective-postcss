@@ -131,6 +131,10 @@ describe('node-detective-postcss', () => {
                 { url: true }
             );
         });
+
+        it('finds url() in @value definitions', () => {
+            assert('@value x: url(bummer.png)', ['bummer.png'], { url: true });
+        });
     });
 
     describe('error handling', () => {
