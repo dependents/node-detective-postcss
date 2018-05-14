@@ -5,15 +5,14 @@ import isUrl = require('is-url');
 
 const debug = d('detective-postcss');
 
-namespace detective {
-    export interface Options {
-        url: boolean;
-    }
-}
-
 function detective(src, options: detective.Options = { url: false }) {
     let references = [];
-    const root = parse(src);
+    let root;
+    try {
+        root = parse(src);
+    } catch (e) {
+        throw new detective.MalformedCssError();
+    }
     root.walkAtRules(rule => {
         let file = null;
         if (isImportRule(rule)) {
@@ -74,6 +73,15 @@ function isImportRule(rule: AtRule) {
 
 function isFrom(node: postCssValuesParser.Node) {
     return node.type == 'word' && node.value === 'from';
+}
+
+namespace detective {
+    export interface Options {
+        url: boolean;
+    }
+
+    export function MalformedCssError() {}
+    MalformedCssError.prototype = Object.create(Error.prototype);
 }
 
 export = detective;
