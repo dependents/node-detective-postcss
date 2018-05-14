@@ -1,7 +1,7 @@
 import detective = require('../src');
 
-function assert(source: string, deps: string[]) {
-    expect(detective(source)).toEqual(deps);
+function assert(source: string, deps: string[], options?: detective.Options) {
+    expect(detective(source, options)).toEqual(deps);
 }
 
 describe('node-detective-postcss', () => {
@@ -94,6 +94,42 @@ describe('node-detective-postcss', () => {
 
         it('leaves calculated definitions alone', () => {
             assert('@value mine: calc(1px + 4px)', []);
+        });
+    });
+
+    describe('declarations', () => {
+        it('ignores url() by default', () => {
+            assert('.x { background: url(bla.png) }', []);
+        });
+
+        it('filters out url() for direct usages', () => {
+            assert('.x { background: url(bla.png) }', ['bla.png'], {
+                url: true,
+            });
+        });
+
+        it('filters out url() for deeper nested ones', () => {
+            assert(
+                ".x { list-style: lower-roman url('../img/shape.png') outside; }",
+                ['../img/shape.png'],
+                { url: true }
+            );
+        });
+
+        it('finds url() in cursor definitions', () => {
+            assert(
+                '.x { cursor: url(cursor1.png) 4 12, auto; }',
+                ['cursor1.png'],
+                { url: true }
+            );
+        });
+
+        it('finds url() in @font-face', () => {
+            assert(
+                '@font-face { font-family: myFirstFont; src: url(sansation_light.woff); }',
+                ['sansation_light.woff'],
+                { url: true }
+            );
         });
     });
 });
