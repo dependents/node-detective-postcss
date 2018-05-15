@@ -66,7 +66,8 @@ function getValueOrUrl(node: postCssValuesParser.Node) {
     } else {
         ret = node.value;
     }
-    return !isUrl(ret) && ret;
+    // is-url sometimes gets data: URLs wrong
+    return !isUrl(ret) && !ret.startsWith('data:') && ret;
 }
 
 function isUrlNode(node: postCssValuesParser.Node) {
