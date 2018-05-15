@@ -1,6 +1,6 @@
 {
     "name": "detective-postcss",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "description": "Detective to find dependents of CSS (PostCSS dialect)",
     "main": "dist/index.js",
     "repository": "git://github.com/joscha/node-detective-postcss.git",
