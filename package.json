@@ -6,10 +6,13 @@
     "repository": "git://github.com/joscha/node-detective-postcss.git",
     "author": "Joscha Feth <joscha@feth.com>",
     "license": "Apache-2.0",
+    "engines": {
+        "node": ">=6.0.0"
+    },
     "dependencies": {
         "debug": "^3.1.0",
         "is-url": "^1.2.4",
-        "postcss": "^6.0.21",
+        "postcss": "^7.0.2",
         "postcss-values-parser": "^1.5.0"
     },
     "devDependencies": {
