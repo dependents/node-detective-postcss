@@ -1,7 +1,7 @@
 # node-detective-postcss
 
 [![build](https://github.com/joscha/node-detective-postcss/actions/workflows/node.js.yml/badge.svg)](https://github.com/joscha/node-detective-postcss/actions/workflows/node.js.yml)
-[![npm](https://img.shields.io/npm/v/node-detective-postcss.svg)](https://www.npmjs.com/package/node-detective-postcss)
+[![npm](https://img.shields.io/npm/v/detective-postcss.svg)](https://www.npmjs.com/package/detective-postcss)
 
 > Find the dependencies of a CSS file (postCSS dialects)
 
