@@ -22,7 +22,7 @@ function detective(src, options: detective.Options = { url: false }) {
     } catch (e) {
         throw new detective.MalformedCssError();
     }
-    root.walkAtRules(rule => {
+    root.walkAtRules((rule) => {
         let file = null;
         if (isImportRule(rule)) {
             const firstNode = parseValue(rule.params).first;
@@ -51,11 +51,11 @@ function detective(src, options: detective.Options = { url: false }) {
         file && references.push(file);
     });
     if (options.url) {
-        root.walkDecls(decl => {
+        root.walkDecls((decl) => {
             const { nodes } = parseValue(decl.value);
             const files = nodes.filter(isUrlNode).map(getValueOrUrl);
             if (files) {
-                files.forEach(file =>
+                files.forEach((file) =>
                     debug(`found %s of %s`, 'url() with import', file)
                 );
                 references = references.concat(files);
