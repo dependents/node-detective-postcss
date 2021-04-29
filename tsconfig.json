@@ -1,12 +1,10 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es2018",
-        "paths": {
-          "*": [
-            "./src/*",
-          ]
-        },
-    },
-    "include": ["src/**/*"]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2018",
+    "paths": {
+      "*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*"]
 }
