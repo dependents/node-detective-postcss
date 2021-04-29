@@ -6,6 +6,9 @@
     "repository": "git://github.com/joscha/node-detective-postcss.git",
     "author": "Joscha Feth <joscha@feth.com>",
     "license": "Apache-2.0",
+    "files": [
+        "dist"
+    ],
     "engines": {
         "node": "^10 || ^12 || >=14"
     },
