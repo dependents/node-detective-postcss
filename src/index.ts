@@ -1,6 +1,15 @@
 import * as d from 'debug';
 import { parse, AtRule } from 'postcss';
-import * as postCssValuesParser from 'postcss-values-parser';
+import {
+    parse as postCssParseValue,
+    ChildNode,
+    Func,
+    Word,
+    Numeric,
+    Operator,
+    Punctuation,
+    Quoted,
+} from 'postcss-values-parser';
 import isUrl = require('is-url');
 
 const debug = d('detective-postcss');
@@ -24,7 +33,9 @@ function detective(src, options: detective.Options = { url: false }) {
         }
         if (isValueRule(rule)) {
             const lastNode = parseValue(rule.params).last;
-            if (isFrom(lastNode.prev())) {
+            const prevNode = lastNode.prev();
+
+            if (prevNode && isFrom(prevNode)) {
                 file = getValueOrUrl(lastNode);
                 if (file) {
                     debug(`found %s of %s`, '@value with import', file);
@@ -55,23 +66,48 @@ function detective(src, options: detective.Options = { url: false }) {
 }
 
 function parseValue(value: string) {
-    return postCssValuesParser(value).parse().first;
+    return postCssParseValue(value);
 }
 
-function getValueOrUrl(node: postCssValuesParser.Node) {
+function getValueOrUrl(node: ChildNode) {
     let ret;
     if (isUrlNode(node)) {
-        // ['(', 'file', ')']
-        ret = node.nodes[1].value;
+        // ['file']
+        const innerNode = node.nodes[0];
+        ret = getValue(innerNode);
     } else {
-        ret = node.value;
+        ret = getValue(node);
     }
     // is-url sometimes gets data: URLs wrong
     return !isUrl(ret) && !ret.startsWith('data:') && ret;
 }
 
-function isUrlNode(node: postCssValuesParser.Node) {
-    return node.type === 'func' && node.value === 'url';
+function getValue(node: ChildNode) {
+    if (!isNodeWithValue(node)) {
+        throw new Error('Unexpectedly found a node without a value');
+    }
+
+    if (node.type === 'quoted') {
+        return node.contents;
+    }
+
+    return node.value;
+}
+
+function isNodeWithValue(
+    node: ChildNode
+): node is Word | Numeric | Operator | Punctuation | Quoted {
+    return (
+        node.type === 'word' ||
+        node.type === 'numeric' ||
+        node.type === 'operator' ||
+        node.type === 'punctuation' ||
+        node.type === 'quoted'
+    );
+}
+
+function isUrlNode(node: ChildNode): node is Func {
+    return node.type === 'func' && node.name === 'url';
 }
 
 function isValueRule(rule: AtRule) {
@@ -82,7 +118,7 @@ function isImportRule(rule: AtRule) {
     return rule.name === 'import';
 }
 
-function isFrom(node: postCssValuesParser.Node) {
+function isFrom(node: ChildNode): node is Word {
     return node.type == 'word' && node.value === 'from';
 }
 
