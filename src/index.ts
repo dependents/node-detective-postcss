@@ -1,4 +1,4 @@
-import * as d from 'debug';
+import { debuglog } from 'util';
 import { parse, AtRule } from 'postcss';
 import {
   parse as postCssParseValue,
@@ -12,25 +12,27 @@ import {
 } from 'postcss-values-parser';
 import isUrl = require('is-url');
 
-const debug = d('detective-postcss');
+const debug = debuglog('detective-postcss');
 
 function detective(src, options: detective.Options = { url: false }) {
   let references = [];
   let root;
   try {
     root = parse(src);
-  } catch (e) {
+  } catch {
     throw new detective.MalformedCssError();
   }
+
   root.walkAtRules((rule) => {
     let file = null;
     if (isImportRule(rule)) {
       const firstNode = parseValue(rule.params).first;
       file = getValueOrUrl(firstNode);
       if (file) {
-        debug(`found %s of %s`, '@import', file);
+        debug('found %s of %s', '@import', file);
       }
     }
+
     if (isValueRule(rule)) {
       const lastNode = parseValue(rule.params).last;
       const prevNode = lastNode.prev();
@@ -38,30 +40,35 @@ function detective(src, options: detective.Options = { url: false }) {
       if (prevNode && isFrom(prevNode)) {
         file = getValueOrUrl(lastNode);
         if (file) {
-          debug(`found %s of %s`, '@value with import', file);
+          debug('found %s of %s', '@value with import', file);
         }
       }
+
       if (options.url && isUrlNode(lastNode)) {
         file = getValueOrUrl(lastNode);
         if (file) {
-          debug(`found %s of %s`, 'url() with import', file);
+          debug('found %s of %s', 'url() with import', file);
         }
       }
     }
-    file && references.push(file);
+
+    if (file) references.push(file);
   });
+
   if (options.url) {
     root.walkDecls((decl) => {
       const { nodes } = parseValue(decl.value);
       const files = nodes.filter(isUrlNode).map(getValueOrUrl);
       if (files) {
-        files.forEach((file) =>
-          debug(`found %s of %s`, 'url() with import', file),
-        );
+        for (const file of files) {
+          debug('found %s of %s', 'url() with import', file);
+        }
+
         references = references.concat(files);
       }
     });
   }
+
   return references;
 }
 
@@ -78,6 +85,7 @@ function getValueOrUrl(node: ChildNode) {
   } else {
     ret = getValue(node);
   }
+
   // is-url sometimes gets data: URLs wrong
   return !isUrl(ret) && !ret.startsWith('data:') && ret;
 }
@@ -119,7 +127,7 @@ function isImportRule(rule: AtRule) {
 }
 
 function isFrom(node: ChildNode): node is Word {
-  return node.type == 'word' && node.value === 'from';
+  return node.type === 'word' && node.value === 'from';
 }
 
 namespace detective {
