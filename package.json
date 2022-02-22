@@ -13,13 +13,11 @@
     "node": "^10 || ^12 || >=14"
   },
   "dependencies": {
-    "debug": "^4.3.3",
     "is-url": "^1.2.4",
     "postcss": "^8.4.6",
     "postcss-values-parser": "^5.0.0"
   },
   "devDependencies": {
-    "@types/debug": "^4.1.7",
     "@types/is-url": "^1.2.30",
     "@types/jest": "^26.0.24",
     "husky": "^6.0.0",

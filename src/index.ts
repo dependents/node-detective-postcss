@@ -1,4 +1,4 @@
-import * as d from 'debug';
+import { debuglog } from 'util';
 import { parse, AtRule } from 'postcss';
 import {
   parse as postCssParseValue,
@@ -12,7 +12,7 @@ import {
 } from 'postcss-values-parser';
 import isUrl = require('is-url');
 
-const debug = d('detective-postcss');
+const debug = debuglog('detective-postcss');
 
 function detective(src, options: detective.Options = { url: false }) {
   let references = [];
