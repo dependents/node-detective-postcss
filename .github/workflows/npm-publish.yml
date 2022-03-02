@@ -1,4 +1,5 @@
 name: npm-publish
+
 on:
   workflow_dispatch:
   release:
@@ -11,13 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
       # We're using npm to publish due to: https://github.com/yarnpkg/yarn/issues/5779
       - run: npm install
       - id: publish
-        uses: JS-DevTools/npm-publish@v1.4.3
+        uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
           dry-run: ${{ github.event.action != 'published' }}
