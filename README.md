@@ -1,6 +1,6 @@
 # node-detective-postcss
 
-[![build](https://github.com/joscha/node-detective-postcss/actions/workflows/node.js.yml/badge.svg)](https://github.com/joscha/node-detective-postcss/actions/workflows/node.js.yml)
+[![build](https://github.com/dependents/node-detective-postcss/actions/workflows/node.js.yml/badge.svg)](https://github.com/dependents/node-detective-postcss/actions/workflows/node.js.yml)
 [![npm](https://img.shields.io/npm/v/detective-postcss.svg)](https://www.npmjs.com/package/detective-postcss)
 
 > Find the dependencies of a CSS file (postCSS dialects)
@@ -35,6 +35,6 @@ Apache 2.0
 ## Releasing
 
 - Bump the version of `package.json` to a meaningful version for the changes since the last release (we follow semver).
-- To do a dry-run of the release and what would go out in the package you can manually execute the [npm-publish](https://github.com/joscha/node-detective-postcss/actions/workflows/npm-publish.yml) workflow on the `main` branch. It will do a dry-run publish (not actually publish the new version).
+- To do a dry-run of the release and what would go out in the package you can manually execute the [npm-publish](https://github.com/dependents/node-detective-postcss/actions/workflows/npm-publish.yml) workflow on the `main` branch. It will do a dry-run publish (not actually publish the new version).
 - Draft a new release in the github project - please use a tag named `vX.X.X` (where `X.X.X` is the new to-be-releases semver of the package - please add as many detail as possible to the release description.
-- Once you're ready, `Publish` the release. Publishing will trigger the [npm-publish](https://github.com/joscha/node-detective-postcss/actions/workflows/npm-publish.yml) workflow on the tag and do the actual publish to npm.
+- Once you're ready, `Publish` the release. Publishing will trigger the [npm-publish](https://github.com/dependents/node-detective-postcss/actions/workflows/npm-publish.yml) workflow on the tag and do the actual publish to npm.
