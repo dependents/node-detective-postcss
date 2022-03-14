@@ -16,8 +16,8 @@ It's the CSS (PostCSS dialect) counterpart to [detective](https://github.com/bro
 ### Usage
 
 ```js
-import fs from 'fs';
-import detective from 'detective-postcss';
+const fs = require('fs');
+const detective = require('detective-postcss');
 
 const content = fs.readFileSync('styles.css', 'utf8');
 
