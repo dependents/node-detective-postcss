@@ -19,7 +19,7 @@
     "dist"
   ],
   "engines": {
-    "node": "^10 || ^12 || >=14"
+    "node": "12.x || 14.x || 16.x"
   },
   "dependencies": {
     "is-url": "^1.2.4",
