@@ -14,7 +14,7 @@
   "homepage": "https://github.com/dependents/node-detective-postcss#readme",
   "keywords": [],
   "author": "Joscha Feth <joscha@feth.com>",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "files": [
     "dist"
   ],
