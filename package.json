@@ -29,7 +29,6 @@
   "devDependencies": {
     "@types/is-url": "^1.2.30",
     "@types/jest": "^27.4.1",
-    "husky": "^6.0.0",
     "jest": "^27.5.1",
     "lint-staged": "^10.5.4",
     "prettier": "^2.5.1",
