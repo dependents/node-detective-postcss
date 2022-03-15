@@ -30,7 +30,7 @@ const allDependencies = detective(content, { url: true });
 
 ### License
 
-Apache 2.0
+MIT
 
 ## Releasing
 
