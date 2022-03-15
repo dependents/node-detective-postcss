@@ -3,9 +3,18 @@
   "version": "5.1.0",
   "description": "Detective to find dependents of CSS (PostCSS dialect)",
   "main": "dist/index.js",
-  "repository": "git://github.com/dependents/node-detective-postcss.git",
+  "typings": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dependents/node-detective-postcss.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dependents/node-detective-postcss/issues"
+  },
+  "homepage": "https://github.com/dependents/node-detective-postcss#readme",
+  "keywords": [],
   "author": "Joscha Feth <joscha@feth.com>",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "files": [
     "dist"
   ],
@@ -57,6 +66,5 @@
       "json",
       "node"
     ]
-  },
-  "typings": "dist/index.d.ts"
+  }
 }
