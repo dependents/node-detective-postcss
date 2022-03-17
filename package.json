@@ -10,7 +10,7 @@
     "dist"
   ],
   "engines": {
-    "node": "^10 || ^12 || >=14"
+    "node": "12.x || 14.x || 16.x"
   },
   "dependencies": {
     "is-url": "^1.2.4",
@@ -29,8 +29,7 @@
     "typescript": "^4.5.5"
   },
   "scripts": {
-    "prepare": "rimraf ./dist",
-    "prepack": "tsc --outDir dist --declaration --declarationDir dist",
+    "prepack": "rimraf ./dist && tsc --outDir dist --declaration --declarationDir dist",
     "pretest": "prettier --check .",
     "test": "jest --ci",
     "test:watch": "jest --watch --notify",
