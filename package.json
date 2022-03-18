@@ -16,7 +16,8 @@
   "author": "Joscha Feth <joscha@feth.com>",
   "license": "MIT",
   "files": [
-    "dist"
+    "dist",
+    "runkitExample.js"
   ],
   "engines": {
     "node": "12.x || 14.x || 16.x"
