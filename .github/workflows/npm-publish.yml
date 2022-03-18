@@ -7,8 +7,8 @@ on:
 
 jobs:
   publish:
-    # only allow on main or tags
-    if: ${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/') }}
+    # only allow on main or tags on our repo
+    if: github.repository == 'dependents/node-detective-postcss' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
     runs-on: ubuntu-latest
 
     steps:
