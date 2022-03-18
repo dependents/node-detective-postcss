@@ -64,5 +64,6 @@
       "json",
       "node"
     ]
-  }
+  },
+  "runkitExampleFilename": "runkitExample.js"
 }
