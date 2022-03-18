@@ -37,8 +37,7 @@
     "typescript": "^4.5.5"
   },
   "scripts": {
-    "prepare": "rimraf ./dist",
-    "prepack": "tsc --outDir dist --declaration --declarationDir dist",
+    "prepack": "rimraf ./dist && tsc --outDir dist --declaration --declarationDir dist",
     "pretest": "prettier --check .",
     "test": "jest --ci",
     "test:watch": "jest --watch --notify",

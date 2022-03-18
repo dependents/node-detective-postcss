@@ -25,4 +25,5 @@ jobs:
           cache: yarn
       - run: yarn install --frozen-lockfile
       - run: yarn test
-      - run: yarn prepack
+      - run: npm install
+      - run: npm pack
