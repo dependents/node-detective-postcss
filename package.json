@@ -20,7 +20,7 @@
     "runkitExample.js"
   ],
   "engines": {
-    "node": "12.x || 14.x || 16.x"
+    "node": "^12.0.0 || ^14.0.0 || >=16.0.0"
   },
   "dependencies": {
     "is-url": "^1.2.4",
