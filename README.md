@@ -7,7 +7,9 @@
 
 Supports `@import` and [`@value ... from`](https://github.com/css-modules/postcss-icss-values).
 
-`npm install --save detective-postcss`
+```sh
+npm install --save detective-postcss
+```
 
 It's the CSS (PostCSS dialect) counterpart to [detective](https://github.com/browserify/detective), [detective-amd](https://github.com/dependents/node-detective-amd), [detective-es6](https://github.com/dependents/node-detective-es6), [detective-sass](https://github.com/dependents/node-detective-sass), [detective-scss](https://github.com/dependents/node-detective-scss).
 
