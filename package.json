@@ -45,26 +45,5 @@
     "precommit": "lint-staged",
     "prettier": "prettier --write ."
   },
-  "lint-staged": {
-    "*.{ts,json,md,yml}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testEnvironment": "node",
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
-  },
   "runkitExampleFilename": "runkitExample.js"
 }
