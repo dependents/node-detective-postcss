@@ -1,9 +1,9 @@
 # node-detective-postcss
 
 [![build](https://img.shields.io/github/actions/workflow/status/dependents/node-detective-postcss/node.js.yml?branch=main&label=CI&logo=github)](https://github.com/dependents/node-detective-postcss/actions/workflows/node.js.yml?query=branch%3Amain)
-[![npm version](https://img.shields.io/npm/v/detective-postcss)](https://www.npmjs.com/package/detective-postcss) [![npm downloads](https://img.shields.io/npm/dm/detective-postcss)](https://www.npmjs.com/package/detective-postcss)
+[![npm version](https://img.shields.io/npm/v/detective-postcss?logo=npm&logoColor=fff)](https://www.npmjs.com/package/detective-postcss) [![npm downloads](https://img.shields.io/npm/dm/detective-postcss)](https://www.npmjs.com/package/detective-postcss)
 
-> Find the dependencies of a CSS file (postCSS dialects)
+> Find the dependencies of a CSS file (PostCSS dialects)
 
 Supports `@import` and [`@value ... from`](https://github.com/css-modules/postcss-icss-values).
 
@@ -32,7 +32,7 @@ const allDependencies = detective(content, { url: true });
 
 ### License
 
-MIT
+[MIT](LICENSE)
 
 ## Releasing
 
