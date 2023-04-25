@@ -3,12 +3,12 @@
 [![build](https://img.shields.io/github/actions/workflow/status/dependents/node-detective-postcss/node.js.yml?branch=main&label=CI&logo=github)](https://github.com/dependents/node-detective-postcss/actions/workflows/node.js.yml?query=branch%3Amain)
 [![npm version](https://img.shields.io/npm/v/detective-postcss?logo=npm&logoColor=fff)](https://www.npmjs.com/package/detective-postcss) [![npm downloads](https://img.shields.io/npm/dm/detective-postcss)](https://www.npmjs.com/package/detective-postcss)
 
-> Find the dependencies of a CSS file (PostCSS dialects)
+> Find the dependencies of a CSS file (PostCSS dialect)
 
 Supports `@import` and [`@value ... from`](https://github.com/css-modules/postcss-icss-values).
 
 ```sh
-npm install --save detective-postcss
+npm install detective-postcss
 ```
 
 It's the CSS (PostCSS dialect) counterpart to [detective](https://github.com/browserify/detective), [detective-amd](https://github.com/dependents/node-detective-amd), [detective-es6](https://github.com/dependents/node-detective-es6), [detective-sass](https://github.com/dependents/node-detective-sass), [detective-scss](https://github.com/dependents/node-detective-scss).
