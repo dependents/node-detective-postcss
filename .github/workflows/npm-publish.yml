@@ -27,6 +27,6 @@ jobs:
         with:
           token: ${{ secrets.NPM_TOKEN }}
           dry-run: ${{ github.event.action != 'published' }}
-      - if: steps.publish.outputs.type != 'none'
+      - if: steps.publish.outputs.type
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
