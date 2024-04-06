@@ -35,7 +35,7 @@
     "prettier": "^3.2.5",
     "rimraf": "^3.0.2",
     "ts-jest": "^29.1.2",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.4"
   },
   "scripts": {
     "prepack": "rimraf ./dist && tsc --outDir dist --declaration --declarationDir dist",
