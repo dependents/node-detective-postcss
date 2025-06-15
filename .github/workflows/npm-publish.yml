@@ -5,6 +5,9 @@ on:
   release:
     types: [published]
 
+env:
+  FORCE_COLOR: 2
+
 jobs:
   publish:
     # only allow on main or tags
