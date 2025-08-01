@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "is-url": "^1.2.4",
-    "postcss-values-parser": "^6.0.2"
+    "postcss-values-parser": "^7.0.0"
   },
   "devDependencies": {
     "@types/is-url": "^1.2.32",
