@@ -41,7 +41,9 @@
     "typescript": "^5.9.3"
   },
   "scripts": {
-    "prepack": "rimraf ./dist && tsc --outDir dist --declaration --declarationDir dist",
+    "build": "rimraf ./dist && npm run compile",
+    "compile": "tsc --outDir dist --declaration --declarationDir dist",
+    "prepack": "npm run build",
     "pretest": "prettier --check .",
     "test": "jest --ci",
     "test:watch": "jest --watch --notify",
