@@ -1,5 +1,5 @@
 import { debuglog } from 'util';
-import isUrl = require('is-url');
+import isUrl = require('is-url-superb');
 import { parse, AtRule } from 'postcss';
 import {
   parse as postCssParseValue,
