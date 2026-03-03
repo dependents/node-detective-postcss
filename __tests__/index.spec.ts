@@ -53,6 +53,10 @@ describe('node-detective-postcss', () => {
       );
     });
 
+    it('ignores protocol-relative URLs', () => {
+      assert('@import url("//example.com/style.css");', []);
+    });
+
     it('does not touch the paths', () => {
       assert('@import "../../././bla.css"', ['../../././bla.css']);
     });
