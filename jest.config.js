@@ -1,6 +1,10 @@
 'use strict';
 
 module.exports = {
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageProvider: 'v8',
+  collectCoverageFrom: ['src/**/*.{ts,tsx,js,jsx}'],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
