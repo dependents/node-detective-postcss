@@ -79,12 +79,8 @@ function getValueOrUrl(node: ChildNode) {
   // ['file']
   const ret = isUrlNode(node) ? getValue(node.nodes[0]) : getValue(node);
 
-  // Filter out absolute URLs (http://, https://, etc.), protocol-relative URLs (//), and data URIs
-  if (/^([a-z]+:)?\/\//i.test(ret) || ret.startsWith('data:')) {
-    return false;
-  }
-
-  return ret;
+  // is-url sometimes gets data: URLs wrong
+  return !isUrl(ret) && !ret.startsWith('data:') && ret;
 }
 
 function getValue(node: ChildNode) {

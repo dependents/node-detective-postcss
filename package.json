@@ -26,6 +26,7 @@
     "postcss": "^8.4.47"
   },
   "dependencies": {
+    "is-url-superb": "^4.0.0",
     "postcss-values-parser": "^6.0.2"
   },
   "devDependencies": {
