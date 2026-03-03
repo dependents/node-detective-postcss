@@ -47,7 +47,7 @@ function detective(src, options: detective.Options = { url: false }) {
       if (options.url && isUrlNode(lastNode)) {
         file = getValueOrUrl(lastNode);
         if (file) {
-          debug('found %s of %s', 'url() with import', file);
+          debug('found %s of %s', 'url() in @value', file);
         }
       }
     }
@@ -61,26 +61,25 @@ function detective(src, options: detective.Options = { url: false }) {
     const { nodes } = postCssParseValue(decl.value);
     const files = nodes
       .filter((node) => isUrlNode(node))
-      .map((node) => getValueOrUrl(node));
+      .map((node) => getValueOrUrl(node))
+      .filter((file): file is string => Boolean(file));
 
-    if (files) {
-      for (const file of files) {
-        debug('found %s of %s', 'url() with import', file);
-      }
-
-      references = references.concat(files);
+    for (const file of files) {
+      debug('found %s of %s', 'url() in declaration', file);
     }
+
+    references = references.concat(files);
   });
 
   return references;
 }
 
-function getValueOrUrl(node: ChildNode) {
-  // ['file']
+function getValueOrUrl(node: ChildNode): string | false {
   const ret = isUrlNode(node) ? getValue(node.nodes[0]) : getValue(node);
 
-  // is-url sometimes gets data: URLs wrong
-  return !isUrl(ret) && !ret.startsWith('data:') && ret;
+  // is-url-superb uses new URL() which doesn't accept protocol-relative URLs;
+  // prepend http: so they get correctly identified and filtered out
+  return !isUrl(ret.startsWith('//') ? `http:${ret}` : ret) && ret;
 }
 
 function getValue(node: ChildNode) {
