@@ -75,11 +75,27 @@ function detective(src, options: detective.Options = { url: false }) {
 }
 
 function getValueOrUrl(node: ChildNode): string | false {
-  const ret = isUrlNode(node) ? getValue(node.nodes[0]) : getValue(node);
+  const ret = isUrlNode(node) ? getUrlContent(node) : getValue(node);
 
   // is-url-superb uses new URL() which doesn't accept protocol-relative URLs;
   // prepend http: so they get correctly identified and filtered out
   return !isUrl(ret.startsWith('//') ? `http:${ret}` : ret) && ret;
+}
+
+function getUrlContent(urlNode: Func): string {
+  const first = urlNode.nodes[0];
+
+  // Quoted: url('foo.css') or url("foo.css")
+  if (first && first.type === 'quoted') {
+    return first.contents;
+  }
+
+  // Unquoted: reconstruct the full string from all child nodes (handles
+  // absolute URLs like url(https://...) which parse as multiple tokens)
+  return urlNode.nodes
+    .filter((n) => isNodeWithValue(n))
+    .map((n) => getValue(n))
+    .join('');
 }
 
 function getValue(node: ChildNode) {
