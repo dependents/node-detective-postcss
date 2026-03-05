@@ -1,4 +1,5 @@
 import { debuglog } from 'util';
+import isUrl = require('is-url');
 import { parse, AtRule } from 'postcss';
 import {
   parse as postCssParseValue,
@@ -10,7 +11,6 @@ import {
   Punctuation,
   Quoted,
 } from 'postcss-values-parser';
-import isUrl = require('is-url');
 
 const debug = debuglog('detective-postcss');
 
@@ -26,7 +26,7 @@ function detective(src, options: detective.Options = { url: false }) {
   root.walkAtRules((rule) => {
     let file = null;
     if (isImportRule(rule)) {
-      const firstNode = parseValue(rule.params).first;
+      const firstNode = postCssParseValue(rule.params).first;
       file = getValueOrUrl(firstNode);
       if (file) {
         debug('found %s of %s', '@import', file);
@@ -34,7 +34,7 @@ function detective(src, options: detective.Options = { url: false }) {
     }
 
     if (isValueRule(rule)) {
-      const lastNode = parseValue(rule.params).last;
+      const lastNode = postCssParseValue(rule.params).last;
       const prevNode = lastNode.prev();
 
       if (prevNode && isFrom(prevNode)) {
@@ -58,7 +58,7 @@ function detective(src, options: detective.Options = { url: false }) {
   if (!options.url) return references;
 
   root.walkDecls((decl) => {
-    const { nodes } = parseValue(decl.value);
+    const { nodes } = postCssParseValue(decl.value);
     const files = nodes
       .filter((node) => isUrlNode(node))
       .map((node) => getValueOrUrl(node));
@@ -73,10 +73,6 @@ function detective(src, options: detective.Options = { url: false }) {
   });
 
   return references;
-}
-
-function parseValue(value: string) {
-  return postCssParseValue(value);
 }
 
 function getValueOrUrl(node: ChildNode) {
