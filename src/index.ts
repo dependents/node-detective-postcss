@@ -14,8 +14,8 @@ import {
 
 const debug = debuglog('detective-postcss');
 
-function detective(src, options: detective.Options = { url: false }) {
-  let references = [];
+function detective(src: string, options: detective.Options = { url: false }) {
+  let references: string[] = [];
   let root;
   try {
     root = parse(src);
@@ -27,14 +27,18 @@ function detective(src, options: detective.Options = { url: false }) {
     let file = null;
     if (isImportRule(rule)) {
       const firstNode = postCssParseValue(rule.params).first;
-      file = getValueOrUrl(firstNode);
-      if (file) {
-        debug('found %s of %s', '@import', file);
+      if (firstNode) {
+        file = getValueOrUrl(firstNode);
+        if (file) {
+          debug('found %s of %s', '@import', file);
+        }
       }
     }
 
     if (isValueRule(rule)) {
       const lastNode = postCssParseValue(rule.params).last;
+      if (!lastNode) return;
+
       const prevNode = lastNode.prev();
 
       if (prevNode && isFrom(prevNode)) {
