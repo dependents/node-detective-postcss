@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
+    "@types/node": "^18.19.130",
     "jest": "^30.2.0",
     "lint-staged": "^16.3.1",
     "postcss": "^8.5.8",
@@ -41,7 +42,7 @@
   },
   "scripts": {
     "build": "rimraf ./dist && npm run compile",
-    "compile": "tsc --outDir dist --declaration --declarationDir dist",
+    "compile": "tsc --project tsconfig.build.json",
     "prepack": "npm run build",
     "pretest": "prettier --check .",
     "test": "jest --ci",
