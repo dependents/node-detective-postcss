@@ -86,7 +86,7 @@ This is the CSS (PostCSS dialect) counterpart to:
 
 ## Releasing
 
-- Bump the version of `package.json` to a meaningful version for the changes since the last release (we follow semver).
-- To do a dry-run of the release and what would go out in the package you can manually execute the [npm-publish](https://github.com/dependents/node-detective-postcss/actions/workflows/npm-publish.yml) workflow on the `main` branch. It will do a dry-run publish (not actually publish the new version).
-- Draft a new release in the github project - please use a tag named `vX.X.X` (where `X.X.X` is the new to-be-releases semver of the package - please add as many detail as possible to the release description.
-- Once you're ready, `Publish` the release. Publishing will trigger the [npm-publish](https://github.com/dependents/node-detective-postcss/actions/workflows/npm-publish.yml) workflow on the tag and do the actual publish to npm.
+- To preview what would be included in the package without publishing, run `npm pack --dry-run` locally.
+- Bump the version in `package.json` following [semver](https://semver.org/) with `npm version`.
+- Draft a new release on GitHub using a tag named `vX.X.X` (matching the new version). Add as much detail as possible to the release description.
+- Once you're ready, **Publish** the release. This triggers the [npm-publish](https://github.com/dependents/node-detective-postcss/actions/workflows/npm-publish.yml) workflow, which publishes the package to npm with provenance.
