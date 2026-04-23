@@ -80,13 +80,15 @@ This is the CSS (PostCSS dialect) counterpart to:
 - [detective-sass](https://github.com/dependents/node-detective-sass) - Sass
 - [detective-scss](https://github.com/dependents/node-detective-scss) - SCSS
 
+## Releasing
+
+1. Ensure CI is green on `main`.
+2. Preview what would be included in the package without publishing: `npm pack --dry-run`.
+3. Bump the version following [semver](https://semver.org/) (this also creates the `vX.Y.Z` tag): `npm version <patch|minor|major>`.
+4. Push the commit and tag: `git push --follow-tags`.
+5. Create (or draft) a GitHub release from that `vX.Y.Z` tag, then **Publish** it.
+6. Publishing the release triggers [npm-publish](https://github.com/dependents/node-detective-postcss/actions/workflows/npm-publish.yml) (`release.published`), which runs `npm ci` and `npm publish --provenance`.
+
 ## License
 
 [MIT](LICENSE)
-
-## Releasing
-
-- Bump the version of `package.json` to a meaningful version for the changes since the last release (we follow semver).
-- To do a dry-run of the release and what would go out in the package you can manually execute the [npm-publish](https://github.com/dependents/node-detective-postcss/actions/workflows/npm-publish.yml) workflow on the `main` branch. It will do a dry-run publish (not actually publish the new version).
-- Draft a new release in the github project - please use a tag named `vX.X.X` (where `X.X.X` is the new to-be-releases semver of the package - please add as many detail as possible to the release description.
-- Once you're ready, `Publish` the release. Publishing will trigger the [npm-publish](https://github.com/dependents/node-detective-postcss/actions/workflows/npm-publish.yml) workflow on the tag and do the actual publish to npm.
