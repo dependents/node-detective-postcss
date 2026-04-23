@@ -1,4 +1,4 @@
-import detective = require('../src');
+import detective = require('..');
 
 function assert(source: string, deps: string[], options?: detective.Options) {
   expect(detective(source, options)).toEqual(deps);

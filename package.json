@@ -16,7 +16,8 @@
   "author": "Joscha Feth <joscha@feth.com>",
   "license": "MIT",
   "files": [
-    "dist"
+    "dist",
+    "!**/__tests__/**"
   ],
   "engines": {
     "node": ">=18"
@@ -41,7 +42,7 @@
   },
   "scripts": {
     "build": "rimraf ./dist && npm run compile",
-    "compile": "tsc --project tsconfig.build.json",
+    "compile": "tsc",
     "prepack": "npm run build",
     "pretest": "prettier --check .",
     "test": "jest --ci",
