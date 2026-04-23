@@ -12,6 +12,7 @@ jobs:
   publish:
     if: github.repository == 'dependents/node-detective-postcss'
     runs-on: ubuntu-latest
+    environment: publish
     permissions:
       contents: read
       # Required to obtain the GitHub OIDC token used for npm provenance
