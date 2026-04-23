@@ -1,6 +1,6 @@
 {
   "name": "detective-postcss",
-  "version": "8.0.2",
+  "version": "8.0.3",
   "description": "Detective to find dependents of CSS (PostCSS dialect)",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
