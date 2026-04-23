@@ -16,8 +16,7 @@
   "author": "Joscha Feth <joscha@feth.com>",
   "license": "MIT",
   "files": [
-    "dist",
-    "runkitExample.js"
+    "dist"
   ],
   "engines": {
     "node": ">=18"
@@ -49,6 +48,5 @@
     "test:watch": "jest --watch --notify",
     "precommit": "lint-staged",
     "prettier": "prettier --write ."
-  },
-  "runkitExampleFilename": "runkitExample.js"
+  }
 }
