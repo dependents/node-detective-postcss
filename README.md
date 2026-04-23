@@ -80,13 +80,15 @@ This is the CSS (PostCSS dialect) counterpart to:
 - [detective-sass](https://github.com/dependents/node-detective-sass) - Sass
 - [detective-scss](https://github.com/dependents/node-detective-scss) - SCSS
 
+## Releasing
+
+1. Ensure CI is green on `main`.
+2. Preview what would be included in the package without publishing: `npm pack --dry-run`.
+3. Bump the version following [semver](https://semver.org/) (this also creates the `vX.Y.Z` tag): `npm version <patch|minor|major>`.
+4. Push the commit and tag: `git push --follow-tags`.
+5. Create (or draft) a GitHub release from that `vX.Y.Z` tag, then **Publish** it.
+6. Publishing the release triggers [npm-publish](https://github.com/dependents/node-detective-postcss/actions/workflows/npm-publish.yml) (`release.published`), which runs `npm ci` and `npm publish --provenance`.
+
 ## License
 
 [MIT](LICENSE)
-
-## Releasing
-
-- To preview what would be included in the package without publishing, run `npm pack --dry-run` locally.
-- Bump the version in `package.json` following [semver](https://semver.org/) with `npm version`.
-- Draft a new release on GitHub using a tag named `vX.X.X` (matching the new version). Add as much detail as possible to the release description.
-- Once you're ready, **Publish** the release. This triggers the [npm-publish](https://github.com/dependents/node-detective-postcss/actions/workflows/npm-publish.yml) workflow, which publishes the package to npm with provenance.
