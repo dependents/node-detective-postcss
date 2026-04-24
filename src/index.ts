@@ -1,22 +1,25 @@
-import { debuglog } from 'util';
+import { debuglog } from 'node:util';
 import isUrl = require('is-url-superb');
-import { parse, AtRule } from 'postcss';
+import { parse, type AtRule, type Root } from 'postcss';
 import {
   parse as postCssParseValue,
-  ChildNode,
-  Func,
-  Word,
-  Numeric,
-  Operator,
-  Punctuation,
-  Quoted,
+  type ChildNode,
+  type Func,
+  type Word,
+  type Numeric,
+  type Operator,
+  type Punctuation,
+  type Quoted,
 } from 'postcss-values-parser';
 
 const debug = debuglog('detective-postcss');
 
-function detective(src: string, options: detective.Options = { url: false }) {
+function detective(
+  src: string,
+  options: detective.Options = { url: false },
+): string[] {
   let references: string[] = [];
-  let root;
+  let root: Root;
   try {
     root = parse(src);
   } catch {
@@ -135,9 +138,9 @@ function isFrom(node: ChildNode): node is Word {
 }
 
 namespace detective {
-  export interface Options {
+  export type Options = {
     url: boolean;
-  }
+  };
 
   export class MalformedCssError extends Error {}
 }
