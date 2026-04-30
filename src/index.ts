@@ -133,7 +133,7 @@ function isImportRule(rule: AtRule) {
   return rule.name === 'import';
 }
 
-function isFrom(node: ChildNode): node is Word {
+function isFrom(node: ChildNode) {
   return node.type === 'word' && node.value === 'from';
 }
 
