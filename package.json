@@ -44,7 +44,7 @@
     "compile": "tsc",
     "prepack": "npm run build",
     "pretest": "prettier --check .",
-    "test": "vitest run --coverage",
+    "test": "vitest run",
     "test:watch": "vitest",
     "precommit": "lint-staged",
     "prettier": "prettier --write ."
