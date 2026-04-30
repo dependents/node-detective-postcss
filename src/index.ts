@@ -138,9 +138,9 @@ function isFrom(node: ChildNode) {
 }
 
 namespace detective {
-  export type Options = {
+  export interface Options {
     url: boolean;
-  };
+  }
 
   export class MalformedCssError extends Error {}
 }
