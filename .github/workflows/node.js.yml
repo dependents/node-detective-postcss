@@ -9,6 +9,7 @@ on:
 
 env:
   FORCE_COLOR: 2
+  UPLOAD_NODE_VERSION: 24
 
 permissions:
   contents: read
@@ -34,3 +35,9 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm pack
+      - name: Upload package artifact
+        if: matrix.node-version == env.UPLOAD_NODE_VERSION
+        uses: actions/upload-artifact@v7
+        with:
+          name: npm-pack
+          path: detective-postcss-*.tgz
