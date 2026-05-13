@@ -72,7 +72,7 @@ function detective(src: string, options: detective.Options = { url: false }) {
       debug('found %s of %s', 'url() in declaration', file);
     }
 
-    references = references.concat(files);
+    references.push(...files);
   });
 
   return references;
