@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import detective, { type Options } from '../index.js';
 
 function assert(source: string, deps: string[], options?: Options) {
