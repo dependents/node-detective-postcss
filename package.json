@@ -35,23 +35,22 @@
     "postcss-values-parser": "^6.0.2"
   },
   "devDependencies": {
-    "@types/jest": "^30.0.0",
-    "@types/node": "^18.19.130",
-    "jest": "^30.4.2",
+    "@types/node": "^20.19.41",
+    "@vitest/coverage-v8": "^4.1.6",
     "lint-staged": "^16.4.0",
     "postcss": "^8.5.14",
     "prettier": "^3.8.3",
     "rimraf": "^6.1.3",
-    "ts-jest": "^29.4.9",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
   },
   "scripts": {
     "build": "rimraf ./dist && npm run compile",
     "compile": "tsc",
     "prepack": "npm run build",
     "pretest": "prettier --check .",
-    "test": "node --experimental-vm-modules node_modules/jest-cli/bin/jest.js --ci",
-    "test:watch": "node --experimental-vm-modules node_modules/jest-cli/bin/jest.js --watch --notify",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "precommit": "lint-staged",
     "prettier": "prettier --write ."
   }
