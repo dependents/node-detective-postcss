@@ -2,8 +2,13 @@
   "name": "detective-postcss",
   "version": "8.0.3",
   "description": "Detective to find dependents of CSS (PostCSS dialect)",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dependents/node-detective-postcss.git"
@@ -20,7 +25,7 @@
     "!**/__tests__/**"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=20.19.0 || >=22.12.0"
   },
   "peerDependencies": {
     "postcss": "^8.4.47"
@@ -45,8 +50,8 @@
     "compile": "tsc",
     "prepack": "npm run build",
     "pretest": "prettier --check .",
-    "test": "jest --ci",
-    "test:watch": "jest --watch --notify",
+    "test": "node --experimental-vm-modules node_modules/jest-cli/bin/jest.js --ci",
+    "test:watch": "node --experimental-vm-modules node_modules/jest-cli/bin/jest.js --watch --notify",
     "precommit": "lint-staged",
     "prettier": "prettier --write ."
   }

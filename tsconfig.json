@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "target": "es2022",
+    "isolatedModules": true,
     "types": ["node", "jest"],
     "rootDir": "src",
     "outDir": "dist",
