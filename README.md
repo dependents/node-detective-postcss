@@ -25,24 +25,19 @@ npm install postcss
 ## Usage
 
 ```js
-const fs = require('node:fs');
+// ESM
+import { readFileSync } from 'node:fs';
+import detective from 'detective-postcss';
+// CommonJS
+const { readFileSync } = require('node:fs');
 const detective = require('detective-postcss');
 
-const content = fs.readFileSync('styles.css', 'utf8');
+const content = readFileSync('styles.css', 'utf8');
 
 // Returns an array of imported file paths (e.g. ['foo.css', 'bar.css'])
 const dependencies = detective(content);
 
 // Also include url() references (images, fonts, etc.) found in declarations
-const allDependencies = detective(content, { url: true });
-```
-
-TypeScript / ESM:
-
-```ts
-import detective = require('detective-postcss');
-
-const dependencies = detective(content);
 const allDependencies = detective(content, { url: true });
 ```
 
