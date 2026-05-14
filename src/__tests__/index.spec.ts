@@ -44,7 +44,7 @@ describe('node-detective-postcss', () => {
       assert('@import "bar.css" (min-width: 25em);', ['bar.css']);
     });
 
-    it('ignores both', () => {
+    it('ignores both media type and media query', () => {
       assert('@import "mobstyle.css" screen and (max-width: 768px);', [
         'mobstyle.css',
       ]);
@@ -147,13 +147,13 @@ describe('node-detective-postcss', () => {
       assert('@value x: url(bummer.png)', ['bummer.png'], { url: true });
     });
 
-    it('ignores absolute urls', () => {
+    it('ignores absolute URLs', () => {
       assert('.x { background: url(https://example.com/img.png) }', [], {
         url: true,
       });
     });
 
-    it('ignores protocol-relative urls', () => {
+    it('ignores protocol-relative URLs', () => {
       assert('.x { background: url(//example.com/img.png) }', [], {
         url: true,
       });
@@ -165,14 +165,14 @@ describe('node-detective-postcss', () => {
       });
     });
 
-    it('ignores base64 data: urls', () => {
+    it('ignores base64 data: URLs', () => {
       assert(
         '.x { background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)}',
         [],
       );
     });
 
-    it('ignores SVG data: urls', () => {
+    it('ignores SVG data: URLs', () => {
       const css = `svg {
         -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><mask id="mask"><rect x="0" y="0" width="32" height="32" fill="#fff"/><rect x="14" y="-10" width="40" height="20" rx="10" fill="#000"/></mask></defs><rect x="0" y="0" width="32" height="32" mask="url(#mask)"/></svg>');
       }`;
