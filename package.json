@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "is-url-superb": "^4.0.0",
-    "postcss-values-parser": "^6.0.2"
+    "postcss-values-parser": "^7.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.19.41",
