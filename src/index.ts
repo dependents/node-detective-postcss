@@ -1,30 +1,38 @@
-import { debuglog } from 'util';
-import isUrl = require('is-url-superb');
-import { parse, AtRule } from 'postcss';
+import { debuglog } from 'node:util';
+import isUrl from 'is-url-superb';
+import { parse, type AtRule, type Root } from 'postcss';
 import {
   parse as postCssParseValue,
-  ChildNode,
-  Func,
-  Word,
-  Numeric,
-  Operator,
-  Punctuation,
-  Quoted,
+  type ChildNode,
+  type Func,
+  type Word,
+  type Numeric,
+  type Operator,
+  type Punctuation,
+  type Quoted,
 } from 'postcss-values-parser';
 
 const debug = debuglog('detective-postcss');
 
-function detective(src: string, options: detective.Options = { url: false }) {
+export class MalformedCssError extends Error {}
+
+export interface Options {
+  url?: boolean;
+}
+
+function detective(src: string, options: Options = { url: false }): string[] {
   let references: string[] = [];
-  let root;
+  let root: Root;
+
   try {
     root = parse(src);
   } catch {
-    throw new detective.MalformedCssError();
+    throw new MalformedCssError();
   }
 
   root.walkAtRules((rule) => {
     let file = null;
+
     if (isImportRule(rule)) {
       const firstNode = postCssParseValue(rule.params).first;
       if (firstNode) {
@@ -134,12 +142,6 @@ function isFrom(node: ChildNode): node is Word {
   return node.type === 'word' && node.value === 'from';
 }
 
-namespace detective {
-  export interface Options {
-    url: boolean;
-  }
+detective.MalformedCssError = MalformedCssError;
 
-  export class MalformedCssError extends Error {}
-}
-
-export = detective;
+export default detective;
