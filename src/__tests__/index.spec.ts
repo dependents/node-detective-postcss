@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import detective, { type Options } from '../index.js';
 
 function assert(source: string, deps: string[], options?: Options) {
-  expect(detective(source, options)).toEqual(deps);
+  expect(detective(source, options)).toStrictEqual(deps);
 }
 
 describe('node-detective-postcss', () => {
@@ -183,7 +183,7 @@ describe('node-detective-postcss', () => {
 
   describe('error handling', () => {
     it('works for broken CSS', () => {
-      expect(() => detective('--')).toThrow(detective.MalformedCssError);
+      expect(() => detective('--')).toThrow(new detective.MalformedCssError());
     });
   });
 });
