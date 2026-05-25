@@ -75,7 +75,7 @@ function detective(src: string, options: Options = {}): string[] {
     const files = nodes
       .filter((node) => isUrlNode(node))
       .map((node) => getValueOrUrl(node))
-      .filter((file): file is string => Boolean(file));
+      .filter(Boolean) as string[];
 
     for (const file of files) {
       debug('found %s of %s', 'url() in declaration', file);
@@ -87,12 +87,12 @@ function detective(src: string, options: Options = {}): string[] {
   return references;
 }
 
-function getValueOrUrl(node: ChildNode): string | false {
+function getValueOrUrl(node: ChildNode): string | undefined {
   const ret = isUrlNode(node) ? getUrlContent(node) : getValue(node);
 
   // is-url-superb uses new URL() which doesn't accept protocol-relative URLs;
   // prepend http: so they get correctly identified and filtered out
-  return !isUrl(ret.startsWith('//') ? `http:${ret}` : ret) && ret;
+  return isUrl(ret.startsWith('//') ? `http:${ret}` : ret) ? undefined : ret;
 }
 
 function getUrlContent(urlNode: Func): string {
