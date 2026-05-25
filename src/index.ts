@@ -21,7 +21,6 @@ export interface Options {
 }
 
 function detective(src: string, options: Options = { url: false }): string[] {
-  let references: string[] = [];
   let root: Root;
 
   try {
@@ -29,6 +28,8 @@ function detective(src: string, options: Options = { url: false }): string[] {
   } catch {
     throw new MalformedCssError();
   }
+
+  const references: string[] = [];
 
   root.walkAtRules((rule) => {
     let file = null;
