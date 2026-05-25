@@ -99,7 +99,7 @@ function getUrlContent(urlNode: Func): string {
   const first = urlNode.nodes[0];
 
   // Quoted: url('foo.css') or url("foo.css")
-  if (first && first.type === 'quoted') {
+  if (first?.type === 'quoted') {
     return first.contents;
   }
 
