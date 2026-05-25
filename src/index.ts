@@ -20,7 +20,7 @@ export interface Options {
   url?: boolean;
 }
 
-function detective(src: string, options: Options = { url: false }): string[] {
+function detective(src: string, options: Options = {}): string[] {
   let root: Root;
 
   try {
