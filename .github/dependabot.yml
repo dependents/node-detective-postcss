@@ -18,6 +18,10 @@ updates:
       default-days: 7
     open-pull-requests-limit: 10
     versioning-strategy: increase
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>20'
     groups:
       production-dependencies:
         dependency-type: 'production'
