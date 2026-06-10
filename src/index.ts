@@ -20,8 +20,7 @@ export interface Options {
   url?: boolean;
 }
 
-function detective(src: string, options: Options = { url: false }): string[] {
-  let references: string[] = [];
+function detective(src: string, options: Options = {}): string[] {
   let root: Root;
 
   try {
@@ -29,6 +28,8 @@ function detective(src: string, options: Options = { url: false }): string[] {
   } catch {
     throw new MalformedCssError();
   }
+
+  const references: string[] = [];
 
   root.walkAtRules((rule) => {
     let file = null;
@@ -74,7 +75,7 @@ function detective(src: string, options: Options = { url: false }): string[] {
     const files = nodes
       .filter((node) => isUrlNode(node))
       .map((node) => getValueOrUrl(node))
-      .filter((file): file is string => Boolean(file));
+      .filter(Boolean) as string[];
 
     for (const file of files) {
       debug('found %s of %s', 'url() in declaration', file);
@@ -86,19 +87,19 @@ function detective(src: string, options: Options = { url: false }): string[] {
   return references;
 }
 
-function getValueOrUrl(node: ChildNode): string | false {
+function getValueOrUrl(node: ChildNode): string | undefined {
   const ret = isUrlNode(node) ? getUrlContent(node) : getValue(node);
 
   // is-url-superb uses new URL() which doesn't accept protocol-relative URLs;
   // prepend http: so they get correctly identified and filtered out
-  return !isUrl(ret.startsWith('//') ? `http:${ret}` : ret) && ret;
+  return isUrl(ret.startsWith('//') ? `http:${ret}` : ret) ? undefined : ret;
 }
 
 function getUrlContent(urlNode: Func): string {
   const first = urlNode.nodes[0];
 
   // Quoted: url('foo.css') or url("foo.css")
-  if (first && first.type === 'quoted') {
+  if (first?.type === 'quoted') {
     return first.contents;
   }
 
