@@ -1,6 +1,6 @@
 import { debuglog } from 'node:util';
 import isUrl from 'is-url-superb';
-import { list, parse, type AtRule, type Root } from 'postcss';
+import { list, parse, type Root } from 'postcss';
 import {
   parse as postCssParseValue,
   Quoted,
@@ -27,46 +27,25 @@ function detective(src: string, options: Options = {}): string[] {
 
   const references: string[] = [];
 
-  root.walkAtRules((rule) => {
-    let file: string | undefined;
+  root.walkAtRules(/^(import|value)$/, (rule) => {
+    // at-rule params aren't plain values (media queries, layer(),
+    // `name: value`), so only parse the component holding the reference:
+    // the first one for @import, the last one for @value
+    const parts = list.space(rule.params);
+    const isImport = rule.name === 'import';
+    const part = isImport ? parts[0] : parts.at(-1);
+    const nodes = part ? parseValue(part) : [];
+    const node = isImport ? nodes[0] : nodes.at(-1);
+    if (!node) return;
 
-    if (isImportRule(rule)) {
-      // only the first component is the file; the rest are media queries,
-      // layer() or supports() conditions which aren't plain values
-      const [first] = list.space(rule.params);
-      const node = first ? parseValue(first)[0] : undefined;
-      if (node) {
-        file = getValueOrUrl(node);
-        if (file) {
-          debug('found %s of %s', '@import', file);
-        }
-      }
+    const isReference =
+      isImport || parts.at(-2) === 'from' || (options.url && isUrlNode(node));
+    const file = isReference ? getValueOrUrl(node) : undefined;
+
+    if (file) {
+      debug('found %s of %s', `@${rule.name}`, file);
+      references.push(file);
     }
-
-    if (isValueRule(rule)) {
-      // `@value name: value` isn't a plain value either, so only parse the
-      // last component (the source after `from`, or the value itself)
-      const parts = list.space(rule.params);
-      const last = parts.at(-1);
-      const lastNode = last ? parseValue(last).at(-1) : undefined;
-      if (!lastNode) return;
-
-      if (parts.at(-2) === 'from') {
-        file = getValueOrUrl(lastNode);
-        if (file) {
-          debug('found %s of %s', '@value with import', file);
-        }
-      }
-
-      if (options.url && isUrlNode(lastNode)) {
-        file = getValueOrUrl(lastNode);
-        if (file) {
-          debug('found %s of %s', 'url() in @value', file);
-        }
-      }
-    }
-
-    if (file) references.push(file);
   });
 
   if (!options.url) return references;
@@ -124,14 +103,6 @@ function isUrlNode(node: Node): boolean {
   const { input, start, end } = node.source;
   const sourceText = input.css.slice(start?.offset, end?.offset);
   return /^url\(/i.test(sourceText);
-}
-
-function isValueRule(rule: AtRule) {
-  return rule.name === 'value';
-}
-
-function isImportRule(rule: AtRule) {
-  return rule.name === 'import';
 }
 
 detective.MalformedCssError = MalformedCssError;
