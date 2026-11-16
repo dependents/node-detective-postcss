@@ -35,7 +35,7 @@ function detective(src: string, options: Options = {}): string[] {
     let file = null;
 
     if (isImportRule(rule)) {
-      const firstNode = postCssParseValue(rule.params).first;
+      const firstNode = parseValue(rule.params).first;
       if (firstNode) {
         file = getValueOrUrl(firstNode);
         if (file) {
@@ -45,7 +45,7 @@ function detective(src: string, options: Options = {}): string[] {
     }
 
     if (isValueRule(rule)) {
-      const lastNode = postCssParseValue(rule.params).last;
+      const lastNode = parseValue(rule.params).last;
       if (!lastNode) return;
 
       const prevNode = lastNode.prev();
@@ -71,7 +71,7 @@ function detective(src: string, options: Options = {}): string[] {
   if (!options.url) return references;
 
   root.walkDecls((decl) => {
-    const { nodes } = postCssParseValue(decl.value);
+    const { nodes } = parseValue(decl.value);
     const files = nodes
       .filter((node) => isUrlNode(node))
       .map((node) => getValueOrUrl(node))
@@ -85,6 +85,25 @@ function detective(src: string, options: Options = {}): string[] {
   });
 
   return references;
+}
+
+// Matches a quoted string (skipped) or an unquoted url() token. Per CSS Syntax
+// the unquoted form can't contain quotes, parens or unescaped whitespace.
+const urlTokenRegex =
+  /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\burl\(\s*((?:[^\s'"()\\]|\\.)+)\s*\)/gi;
+
+/**
+ * postcss-values-parser re-tokenizes the inside of an unquoted url() and
+ * throws on characters such as `;` (e.g. `url(data:image/png;base64,...)`),
+ * although postcss accepts them as a single <url-token>. Quoting the url
+ * beforehand yields the same result for the consumer without the error.
+ */
+function parseValue(value: string) {
+  return postCssParseValue(
+    value.replace(urlTokenRegex, (match, url?: string) =>
+      url === undefined ? match : `url("${url}")`,
+    ),
+  );
 }
 
 function getValueOrUrl(node: ChildNode): string | undefined {
