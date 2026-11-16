@@ -1,15 +1,11 @@
 import { debuglog } from 'node:util';
 import isUrl from 'is-url-superb';
-import { parse, type AtRule, type Root } from 'postcss';
+import { list, parse, type AtRule, type Root } from 'postcss';
 import {
   parse as postCssParseValue,
-  type ChildNode,
-  type Func,
-  type Word,
-  type Numeric,
-  type Operator,
-  type Punctuation,
-  type Quoted,
+  Quoted,
+  Word,
+  type Node,
 } from 'postcss-values-parser';
 
 const debug = debuglog('detective-postcss');
@@ -32,12 +28,15 @@ function detective(src: string, options: Options = {}): string[] {
   const references: string[] = [];
 
   root.walkAtRules((rule) => {
-    let file = null;
+    let file: string | undefined;
 
     if (isImportRule(rule)) {
-      const firstNode = postCssParseValue(rule.params).first;
-      if (firstNode) {
-        file = getValueOrUrl(firstNode);
+      // only the first component is the file; the rest are media queries,
+      // layer() or supports() conditions which aren't plain values
+      const [first] = list.space(rule.params);
+      const node = first ? parseValue(first)[0] : undefined;
+      if (node) {
+        file = getValueOrUrl(node);
         if (file) {
           debug('found %s of %s', '@import', file);
         }
@@ -45,12 +44,14 @@ function detective(src: string, options: Options = {}): string[] {
     }
 
     if (isValueRule(rule)) {
-      const lastNode = postCssParseValue(rule.params).last;
+      // `@value name: value` isn't a plain value either, so only parse the
+      // last component (the source after `from`, or the value itself)
+      const parts = list.space(rule.params);
+      const last = parts.at(-1);
+      const lastNode = last ? parseValue(last).at(-1) : undefined;
       if (!lastNode) return;
 
-      const prevNode = lastNode.prev();
-
-      if (prevNode && isFrom(prevNode)) {
+      if (parts.at(-2) === 'from') {
         file = getValueOrUrl(lastNode);
         if (file) {
           debug('found %s of %s', '@value with import', file);
@@ -71,8 +72,9 @@ function detective(src: string, options: Options = {}): string[] {
   if (!options.url) return references;
 
   root.walkDecls((decl) => {
-    const { nodes } = postCssParseValue(decl.value);
-    const files = nodes
+    if (!/url\(/i.test(decl.value)) return;
+
+    const files = parseValue(decl.value)
       .filter((node) => isUrlNode(node))
       .map((node) => getValueOrUrl(node))
       .filter(Boolean) as string[];
@@ -87,48 +89,41 @@ function detective(src: string, options: Options = {}): string[] {
   return references;
 }
 
-function getValueOrUrl(node: ChildNode): string | undefined {
-  const ret = isUrlNode(node) ? getUrlContent(node) : getValue(node);
+function parseValue(value: string): Node[] {
+  try {
+    return postCssParseValue(value).nodes as unknown as Node[];
+  } catch {
+    throw new MalformedCssError();
+  }
+}
+
+function getValueOrUrl(node: Node): string | undefined {
+  // url() nodes are Word nodes holding the url's contents
+  let ret: string;
+  if (node instanceof Quoted) {
+    ret = node.contents;
+  } else if (node instanceof Word) {
+    ret = node.value;
+  } else {
+    return undefined;
+  }
 
   // is-url-superb uses new URL() which doesn't accept protocol-relative URLs;
   // prepend http: so they get correctly identified and filtered out
   return isUrl(ret.startsWith('//') ? `http:${ret}` : ret) ? undefined : ret;
 }
 
-function getUrlContent(urlNode: Func): string {
-  const first = urlNode.nodes[0];
+/**
+ * postcss-values-parser turns url() into a Word node holding just the url's
+ * contents, so the only way to tell it apart from a plain word is to look at
+ * the source text it was parsed from.
+ */
+function isUrlNode(node: Node): boolean {
+  if (!(node instanceof Word) || !node.source?.input) return false;
 
-  // Quoted: url('foo.css') or url("foo.css")
-  if (first && first.type === 'quoted') {
-    return first.contents;
-  }
-
-  // Unquoted: reconstruct the full string from all child nodes (handles
-  // absolute URLs like url(https://...) which parse as multiple tokens)
-  return urlNode.nodes
-    .filter((n) => isNodeWithValue(n))
-    .map((n) => getValue(n))
-    .join('');
-}
-
-function getValue(node: ChildNode) {
-  if (!isNodeWithValue(node)) {
-    throw new Error('Unexpectedly found a node without a value');
-  }
-
-  return node.type === 'quoted' ? node.contents : node.value;
-}
-
-function isNodeWithValue(
-  node: ChildNode,
-): node is Word | Numeric | Operator | Punctuation | Quoted {
-  return ['word', 'numeric', 'operator', 'punctuation', 'quoted'].includes(
-    node.type,
-  );
-}
-
-function isUrlNode(node: ChildNode): node is Func {
-  return node.type === 'func' && node.name === 'url';
+  const { input, start, end } = node.source;
+  const sourceText = input.css.slice(start?.offset, end?.offset);
+  return /^url\(/i.test(sourceText);
 }
 
 function isValueRule(rule: AtRule) {
@@ -137,10 +132,6 @@ function isValueRule(rule: AtRule) {
 
 function isImportRule(rule: AtRule) {
   return rule.name === 'import';
-}
-
-function isFrom(node: ChildNode): node is Word {
-  return node.type === 'word' && node.value === 'from';
 }
 
 detective.MalformedCssError = MalformedCssError;
